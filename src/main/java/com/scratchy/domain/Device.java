@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.util.UUID;
 
 @Data
 @Document
@@ -15,12 +16,10 @@ public class Device {
 
     @Id
     @NotNull
-    private String id;
+    private String id = UUID.randomUUID().toString();
 
-    @Pattern(regexp = "")
     private String model;
 
-    @Pattern(regexp = "")
     private String description;
 
     public Device(String model, String description) {

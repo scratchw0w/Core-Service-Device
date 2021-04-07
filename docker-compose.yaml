@@ -1,23 +1,17 @@
-version: "3.7"
+version: "3.8"
 services:
-  mongodb:
-    image: mongo
-    container_name: mongodb
-    environment:
-      - PUID=1000
-      - PGID=1000
-    volumes:
-      - /home/barry/mongodb/database:/data/db
+  mongo:
+    container_name: 'core-db'
+    image: mongo:latest
     ports:
       - 27017:27017
-    restart: unless-stopped
 
   myapp:
     container_name: 'core-service'
     build:
       context: .
       dockerfile: Dockerfile
-    depends_on:
-      - mongodb
     ports:
       - "8080:8080"
+    links:
+      - mongo
