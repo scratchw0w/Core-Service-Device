@@ -5,6 +5,7 @@ import com.scratchy.repository.DeviceDao;
 import com.scratchy.service.DeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -15,29 +16,43 @@ public class DeviceServiceImpl implements DeviceService {
     private DeviceDao deviceDao;
 
     @Override
+    @Transactional
     public Optional<Device> getDevice(String serialNumber) {
         return deviceDao.findById(serialNumber);
     }
 
     @Override
+    @Transactional
     public Iterable<Device> getDeviceList() {
         return deviceDao.findAll();
     }
 
     @Override
+    @Transactional
     public void createDevice(Device device) {
         deviceDao.save(device);
     }
 
     @Override
-    public void updateDevice(Device device) {
-        deviceDao.save(device);
+    @Transactional
+    public Optional<Device> updateDevice(String serialNumber, Device device) {
+        Optional<Device> oldDevice = deviceDao.findById(serialNumber);
+        if (oldDevice.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(deviceDao.save(device));
     }
 
     @Override
+    @Transactional
     public Optional<Device> deleteDevice(String serialNumber) {
         Optional<Device> device = deviceDao.findById(serialNumber);
-        device.ifPresent(deviceToDelete -> deviceDao.delete(deviceToDelete));
+        if (device.isPresent()) {
+            deviceDao.delete(device.get());
+            return device;
+        }
+
         return device;
     }
 }

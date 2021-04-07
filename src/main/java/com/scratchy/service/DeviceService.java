@@ -12,7 +12,7 @@ public interface DeviceService {
 
     void createDevice(Device device);
 
-    void updateDevice(Device device);
+    Optional<Device> updateDevice(String serialNumber, Device device);
 
     Optional<Device> deleteDevice(String serialNumber);
 }
