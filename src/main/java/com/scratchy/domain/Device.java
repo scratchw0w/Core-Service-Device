@@ -15,7 +15,7 @@ public class Device {
 
     @Id
     @NotNull
-    @Pattern(regexp = "^[a-zA-Z0-9-\\s]*$", message = "Serial number is incorrect")
+    @Pattern(regexp = "^[a-zA-Z0-9-\\s]*$", message = "Serial Number is incorrect")
     private String id;
 
     @NotNull

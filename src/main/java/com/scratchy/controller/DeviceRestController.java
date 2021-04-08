@@ -1,6 +1,7 @@
 package com.scratchy.controller;
 
 import com.scratchy.domain.Device;
+import com.scratchy.errors.DeviceIdIsAlreadyExistException;
 import com.scratchy.errors.DeviceNotFoundException;
 import com.scratchy.service.DeviceService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -71,8 +72,13 @@ public class DeviceRestController {
     @PostMapping(path = "/devices", consumes = "application/json")
     public ResponseEntity<Device> createDevice(@Valid @RequestBody Device device) {
         log.info("Creating new Device with id: " + device.getId());
-        deviceService.createDevice(device);
-        return ResponseEntity.status(HttpStatus.CREATED).body(device);
+        Optional<Device> createDevice = deviceService.createDevice(device);
+        if (createDevice.isEmpty()) {
+            log.warn("Device with such Id is already in use");
+            throw new DeviceIdIsAlreadyExistException();
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(createDevice.get());
     }
 
     @Operation(summary = "Update an existing device")
@@ -87,7 +93,7 @@ public class DeviceRestController {
         Optional<Device> updatedDevice = deviceService.updateDevice(id, device);
         return updatedDevice.map(ResponseEntity::ok).orElseGet(() -> {
                     log.warn("There is no device with id: " + id);
-                    throw new DeviceNotFoundException("There is no device with id: " +id);
+                    throw new DeviceNotFoundException("There is no device with id: " + id);
         });
     }
 

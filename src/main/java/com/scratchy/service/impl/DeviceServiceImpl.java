@@ -29,8 +29,13 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     @Transactional
-    public void createDevice(Device device) {
-        deviceDao.save(device);
+    public Optional<Device> createDevice(Device device) {
+        Optional<Device> deviceOptional = deviceDao.findById(device.getId());
+        if (deviceOptional.isPresent()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(deviceDao.save(device));
     }
 
     @Override

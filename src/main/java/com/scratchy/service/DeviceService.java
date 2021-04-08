@@ -10,7 +10,7 @@ public interface DeviceService {
 
     Iterable<Device> getDeviceList();
 
-    void createDevice(Device device);
+    Optional<Device> createDevice(Device device);
 
     Optional<Device> updateDevice(String serialNumber, Device device);
 

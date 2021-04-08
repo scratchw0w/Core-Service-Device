@@ -100,6 +100,15 @@ public class DeviceControllerIT {
     }
 
     @Test
+    public void shouldReturn409ForAddingExistingDeviceId() {
+        ResponseEntity<Device> responseEntity = this.restTemplate
+                .exchange(BASE_URL + PORT + "/api/devices",
+                        HttpMethod.POST, getRequestForDevice(this.testDevice), Device.class);
+
+        assertEquals(HttpStatus.CONFLICT, responseEntity.getStatusCode());
+    }
+
+    @Test
     public void shouldReturnOkStatusForUpdatingExistingDevice() {
         ResponseEntity<Device> responseEntity = this.restTemplate
                 .getForEntity(BASE_URL + PORT + "/api/devices/" + testDevice.getId(), Device.class);
