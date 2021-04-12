@@ -1,5 +1,6 @@
 package com.scratchy.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -11,6 +12,7 @@ import javax.validation.constraints.Pattern;
 @Data
 @Document
 @NoArgsConstructor
+@AllArgsConstructor
 public class Device {
 
     @Id
@@ -23,10 +25,4 @@ public class Device {
     private String model;
 
     private String description;
-
-    public Device(String serialNumber, String model, String description) {
-        this.id = serialNumber;
-        this.model = model;
-        this.description = description;
-    }
 }

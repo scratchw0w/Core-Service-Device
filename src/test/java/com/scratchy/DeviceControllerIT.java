@@ -2,7 +2,7 @@ package com.scratchy;
 
 import com.scratchy.builders.DeviceBuilder;
 import com.scratchy.domain.Device;
-import com.scratchy.repository.DeviceDao;
+import com.scratchy.repository.DeviceRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,7 +31,7 @@ public class DeviceControllerIT {
     private TestRestTemplate restTemplate;
 
     @Autowired
-    private DeviceDao deviceDao;
+    private DeviceRepository deviceRepository;
 
     @BeforeEach
     public void insertNewDevice() {
@@ -53,7 +53,7 @@ public class DeviceControllerIT {
                 .exchange(BASE_URL + PORT + "/api/devices", HttpMethod.GET,
                         null, new ParameterizedTypeReference<Iterable<Device>>() {});
 
-        Iterable<Device> expectedDeviceList = deviceDao.findAll();
+        Iterable<Device> expectedDeviceList = deviceRepository.findAll();
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(expectedDeviceList, responseEntity.getBody());
